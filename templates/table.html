@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ filename }} - 単語帳</title>
+<script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <header class="page-header wrapper">
+        <h1><a href="{{ url_for('index') }}">単語でGO！</a></h1>
+
+        <nav aria-label="パンくずリスト">
+            <ul style="list-style: none; display: flex; gap: 0.5em;">
+            <li><a href="{{ url_for('index') }}">ホーム</a></li>
+            <li>›</li>
+            <li>{{ filename }}</li>
+            </ul>
+        </nav>
+    </header>
+
+    <h2>「{{ filename }}」の単語帳</h2>
+
+    <div id="loading-message" style="display: none;">単語帳を読み込み中...</div>
+    <div id="error-message" style="color: red; display: none;">データの読み込み中にエラーが発生しました。</div>
+
+    <table id="vocab-table">
+        <thead>
+            <tr>
+                <th>単語</th>
+                <th>意味</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+    <p id="no-words-message" style="display: none;">この単語帳にはまだ単語がありません。</p>
+
+    <h3>新しい単語を追加</h3>
+    <form id="add-word-form">
+        <label for="word">単語:</label>
+        <input type="text" id="word" name="word" required>
+        <label for="meaning">意味:</label>
+        <input type="text" id="meaning" name="meaning" required>
+        <button type="submit">追加</button>
+    </form>
+    <p id="add-word-message" style="color: green; display: none;"></p>
+    <p id="add-word-error" style="color: red; display: none;"></p>
+
+</div>
+{% endblock %}
