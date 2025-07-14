@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vocabTableBody.innerHTML = '';      // 既存の行をクリア
 
         try {
-            const response = await fetch(`/api/vocab/${filename}`);
+            const response = await fetch(`/api/vocab/${filename}`);     //GETメソッドのみ通信
             if (!response.ok) {     
                 // 存在しない単語帳を開いたとき
                 if (response.status === 404) {
@@ -35,22 +35,81 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadingMessage.style.display = 'none';
                     return;
                 }
+                // 404以外のエラー
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+
+            // fetch の response をjson形式で受け取る
             const words = await response.json();
 
+            // 単語がない時・ある時
             if (words.length === 0) {
                 noWordsMessage.style.display = 'block';
-                document.getElementById('vocab-table').style.display = 'none'; // テーブルを非表示
+                document.getElementById('vocab-table').style.display = 'none'; // CSS操作　テーブルを非表示
             } else {
                 noWordsMessage.style.display = 'none';
-                document.getElementById('vocab-table').style.display = 'table'; // テーブルを表示
-                words.forEach(wordEntry => {
-                    const row = vocabTableBody.insertRow();
-                    const wordCell = row.insertCell();
-                    const meaningCell = row.insertCell();
+                document.getElementById('vocab-table').style.display = 'table'; // CSS操作　テーブルを表示
+
+                // データをひとつずつ処理
+                words.forEach((wordEntry, index) => {
+                    const row = vocabTableBody.insertRow();     // 行追加
+
+                    // 単語セル
+                    const wordCell = row.insertCell();          
                     wordCell.textContent = wordEntry.word;
+
+                    // 意味セル
+                    const meaningCell = row.insertCell();
                     meaningCell.textContent = wordEntry.meaning;
+
+                    // 評価ラジオボタンセル
+                    const radioCell = row.insertCell();
+                    const levels = [
+                        {color: 'green', label: '◎'},
+                        {color: 'yellow', label: '〇'},
+                        {color: 'red', label: '△'}
+                    ];
+
+                    const savedRating = localStorage.getItem(`rating-${index}`);
+
+                    levels.forEach(level => {
+                        const label = document.createElement('label');
+                        label.style.marginRight = '8px';
+
+                        const radio = document.createElement('input');
+                        radio.type = 'radio';
+                        radio.name = `rating-${index}`; // 行ごとに分けたラジオボタン
+                        radio.value = level.color;
+
+                        if (savedRating === level.color) {
+                            radio.checked = true;
+                        }
+
+                        radio.addEventListener('change', () => {
+                            localStorage.setItem(`rating-${index}`, level.color);
+                        });
+
+                        label.appendChild(radio);
+
+                        const span = document.createElement('span');
+                        span.textContent = level.label;
+                        span.style.color = level.color;
+                        label.appendChild(span);
+
+                        radioCell.appendChild(label);
+                    });
+
+                    const deleteCell = row.insertCell();
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '削除';
+
+                    deleteCell.appendChild(deleteButton);
+
+                    const retryCell = row.insertCell();
+                    const retryButton = document.createElement('button');
+                    retryButton.textContent = 'リトライ';
+
+                    retryCell.appendChild(retryButton);
                 });
             }
         } catch (error) {
@@ -59,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             errorMessage.style.display = 'block';
             document.getElementById('vocab-table').style.display = 'none'; // テーブルを非表示
         } finally {
-            loadingMessage.style.display = 'none';
+            loadingMessage.style.display = 'none';      //　最後にLOADING...を非表示
         }
     };
 
@@ -67,9 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchAndDisplayVocab();
 
     // 単語追加フォームの送信イベントリスナー
+    // form要素があれば
     if (addWordForm) {
-        addWordForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // デフォルトのフォーム送信を防止
+        addWordForm.addEventListener('submit', async (event) => {       // ボタン監視
+            event.preventDefault(); // ページの再読み込みを防止
 
             addWordMessage.style.display = 'none';
             addWordError.style.display = 'none';
@@ -77,9 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const wordInput = document.getElementById('word');
             const meaningInput = document.getElementById('meaning');
 
+            // 入力した値
             const newWord = wordInput.value.trim();
             const newMeaning = meaningInput.value.trim();
 
+            // 値がない時の処理
             if (!newWord || !newMeaning) {
                 addWordError.textContent = '単語と意味の両方を入力してください。';
                 addWordError.style.display = 'block';
@@ -87,13 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch(`/api/vocab/${filename}`, {
+                const response = await fetch(`/api/vocab/${filename}`, {        //　POSTメソッド（追加用）を通信
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
 
-                    // データの値をJSON形式に変換する
+                    // データの値をJSON形式に変換して、body: をfetchに送信
                     body: JSON.stringify({ word: newWord, meaning: newMeaning })
                 });
 
@@ -120,4 +182,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    const table = document.getElementById('vocab-table');
+    
+
+    table.addEventListener('dblclick', (e) => {
+        const target = e.target;
+        if (target.tagName.toLowerCase() === 'td' && !target.classList.contains('editing')) {
+        // 編集中なら何もしない
+
+        const currentText = target.textContent;
+        target.classList.add('editing');
+
+        // input要素作成
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = currentText;
+
+        // tdの中身を空にしてinputを入れる
+        target.textContent = '';
+        target.appendChild(input);
+
+        input.focus();
+        input.select();
+
+        // 編集終了処理
+        function finishEditing() {
+            const newValue = input.value.trim();
+            target.textContent = newValue || '(空です)';
+            target.classList.remove('editing');
+        }
+
+        // エンターキーで終了
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+            finishEditing();
+            }
+        });
+
+        // フォーカスが外れたら終了
+        input.addEventListener('blur', () => {
+            finishEditing();
+        });
+        }
+    });
 });
