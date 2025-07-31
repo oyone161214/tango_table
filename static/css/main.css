@@ -49,7 +49,7 @@ nav a {
 }
 
 /* フォームのスタイル */
-form {
+#add-word-form {
     margin-bottom: 20px;
     padding: 15px;
     border: 1px solid #ddd;
@@ -63,7 +63,7 @@ form label {
     font-weight: bold;
 }
 
-form input[type="text"] {
+.formContent {
     width: calc(100% - 22px); /* paddingとborderを考慮 */
     padding: 10px;
     margin-bottom: 10px;
@@ -96,8 +96,9 @@ form button[type="submit"]:hover {
 
 #vocab-table th, #vocab-table td {
     border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
+    height: 50px;
+    padding: 0px;
+    /* text-align: left; */
 }
 
 #vocab-table th {
@@ -112,6 +113,12 @@ form button[type="submit"]:hover {
 
 #vocab-table tbody tr:hover {
     background-color: #e9e9e9;
+}
+
+.buttonCell {
+    text-align: center;
+    vertical-align: middle;
+    box-sizing: border-box;
 }
 
 /* メッセージのスタイル */
@@ -144,4 +151,158 @@ form button[type="submit"]:hover {
     background-color: #d4edda;
     border: 1px solid #c3e6cb;
     color: #155724;
+}
+
+
+
+
+  td.editing input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    border: none;
+    padding: 2px 20px;
+    font-size: inherit;
+    font-family: inherit;
+    overflow: hidden;         
+    white-space: nowrap;
+  }
+
+/* .optionModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display:flex;
+    justify-content:  center;
+    align-items: center;
+}
+.optionModal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+} */
+ 
+/* --- */
+/* モーダル全体のスタイル */
+.optionModal {
+    /* 初期状態では非表示 */
+    display: none; 
+    /* 画面全体を覆う */
+    position: fixed; 
+    z-index: 1000; /* 他のコンテンツの上に表示 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* 半透明の黒い背景 */
+    background-color: rgba(0, 0, 0, 0.6); 
+    /* モーダルコンテンツを中央に配置 */
+    /* flexboxを使って中央揃えを簡単にする */
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+    /* モーダルを非表示にするときは display: none; に変更 */
+    /* 表示するときは display: flex; に変更 */
+}
+
+/* モーダルコンテンツのスタイル */
+.openModal-content {
+    background-color: #fefefe;
+    margin: auto; /* display: flex; と組み合わせると不要だが、念のため */
+    padding: 25px 30px;
+    border-radius: 10px; /* 角を丸くする */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 影を付けて浮き上がらせる */
+    width: 90%; /* 幅の最大値を設定 */
+    max-width: 500px; /* 最大幅を制限して、大きくなりすぎないようにする */
+    box-sizing: border-box; /* paddingやborderをwidth/heightに含める */
+    position: relative; /* 子要素のabsolute配置の基準にする */
+    animation: fadeIn 0.3s ease-out; /* フェードインアニメーション */
+}
+
+/* モーダル内のH2タイトル */
+.openModal-content h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    border-bottom: 1px solid #eee; /* 下線で区切る */
+    padding-bottom: 15px;
+}
+
+/* 各設定項目のラッパー（出力スタイル、文字数など） */
+#output {
+    display: flex;
+    flex-direction: column; /* 縦に並べる */
+    gap: 15px; /* 各要素間の隙間 */
+    padding-bottom: 20px;
+}
+
+/* ラベルとラジオボタン/セレクトボックスのスタイル */
+#output label {
+    display: flex; /* ラベル内の要素を横並びにする */
+    align-items: center; /* 垂直方向の中央揃え */
+    font-size: 1.1em;
+    color: #555;
+    cursor: pointer; /* マウスオーバーでカーソルをポインタにする */
+}
+
+#output input[type="radio"] {
+    margin-right: 10px; /* ラジオボタンとテキストの間のスペース */
+    transform: scale(1.2); /* ラジオボタンを少し大きくする */
+}
+
+#output select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    width: auto; /* 内容に合わせて幅を自動調整 */
+    max-width: 100%; /* 親要素の幅を超えないようにする */
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none; /* デフォルトの矢印を非表示 (モダンブラウザ向け) */
+    -webkit-appearance: none; /* Safari向け */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M9.293%2012.95l-.707-.707L4%207.05l1.414-1.414L10%209.293l4.586-4.587L16%207.05l-6.707%206.707z%22%2F%3E%3C%2Fsvg%3E'); /* カスタムのドロップダウン矢印 */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px; /* 矢印のスペースを確保 */
+}
+
+/* 閉じるボタンのスタイル */
+#closeModal {
+    display: block; /* ブロック要素にして中央揃えしやすくする */
+    margin: 25px auto 0; /* 上に余白、左右自動で中央揃え */
+    padding: 12px 30px;
+    background-color: #007bff; /* 青色の背景 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.2s ease-in-out; /* ホバー時のアニメーション */
+}
+
+#closeModal:hover {
+    background-color: #0056b3; /* ホバーで少し暗く */
+}
+
+/* フェードインアニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

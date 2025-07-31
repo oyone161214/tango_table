@@ -1,2 +1,39 @@
-Flask, HTMLは大分理解が深まった。
-CSS, JSは複雑で構築するのが難しいが、全体の約7割のコードは読めるようになった印象
+render_templateは　base.htmlとか、jinja2を使えるようにする
+
+redirectは　urlを変更して、urlに合わせた@app.routeを実行する
+
+url_for(ビュー関数、引数)
+
+正解プロンプト
+const promptMessage = `${filename}について${newWord}の意味。\n出力形式：テキストで意味の内容のみ。${newWord}を主語として含めない。\n出力件数: 意味${count}件\n文体: ${type}\n出力条件: ${style}、${length === '設定なし' ? '' : `1件あたりの目安文字数: ${length}字程度`}`;
+
+
+
+document.getElementById('sortMode').addEventListener('change', () => {
+    sortAndDisplay(currentWords); // currentWords は読み込んだ単語データ
+});
+
+function sortAndDisplay(words) {
+    const mode = document.getElementById('sortMode').value;
+    const ratingOrder = { green: 0, yellow: 1, red: 2 };
+
+    switch (mode) {
+        case 'date-asc':
+            words.sort((a, b) => new Date(a.date) - new Date(b.date));
+            break;
+        case 'date-desc':
+            words.sort((a, b) => new Date(b.date) - new Date(a.date));
+            break;
+        case 'word':
+            words.sort((a, b) => a.word.localeCompare(b.word, 'ja'));
+            break;
+        case 'random':
+            words.sort(() => Math.random() - 0.5);
+            break;
+        case 'rating':
+            words.sort((a, b) => ratingOrder[a.rating] - ratingOrder[b.rating]);
+            break;
+    }
+
+    displayVocabTable(words); // 並べ替えたあと再表示
+}

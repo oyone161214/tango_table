@@ -6,9 +6,10 @@
 {% endblock %}
 
 {% block body %}
-<div class="content">
+<div class="content" data-filename="{{ filename }}">
     <header class="page-header wrapper">
         <h1><a href="{{ url_for('index') }}">単語でGO！</a></h1>
+        
 
         <nav aria-label="パンくずリスト">
             <ul style="list-style: none; display: flex; gap: 0.5em;">
@@ -32,7 +33,7 @@
           <option value="yellow_sort">黄チェックのみ</option>
           <option value="red_sort">赤チェックのみ</option>
         </select>
-        <a href="{{ url_for('index')}}" style="font-size: 1.5rem; margin-top: 5px; margin-left: 25px;">設定</a>
+        <button id = "openModal" style="font-size: 1.5rem; margin-top: 5px; margin-left: 25px;">設定</button>
       </div>
     </div>
 
@@ -42,9 +43,10 @@
     <h3>新しい単語を追加</h3>
     <form id="add-word-form">
         <label for="word">単語:</label>
-        <input type="text" id="word" name="word" required>
+        <input type="text" id="word" name="word" class="formContent" required>
+        <button type="submit" id = "chat">GPT</button>
         <label for="meaning">意味:</label>
-        <input type="text" id="meaning" name="meaning" required>
+        <input type="text" id="meaning" name="meaning" class="formContent" required>
         <button type="submit">追加</button>
     </form>
     <p id="add-word-message" style="color: green; display: none;"></p>
@@ -64,6 +66,35 @@
             </tbody>
     </table>
     <p id="no-words-message" style="display: none;">この単語帳にはまだ単語がありません。</p>
+
+    <div id="optionModal" class="optionModal">
+        <div class = "openModal-content">
+            <h2>設定</h2>
+            <div id = "output">
+                
+                <label>
+                    <input type="radio" name="outputStyle" value="箇条書き" checked> 箇条書き
+                </label>
+                <label>
+                    <input type="radio" name="outputStyle" value="文章形式"> 文章形式
+                </label>
+                <label for="outputLength">出力する文字数：</label>
+                <select name="outputLength" id="outputLength">
+                    <option value="">設定なし</option>
+                </select>
+                <label>
+                    <input type="radio" name="outputType" value="要点を30字程度で簡潔に" checked> 簡潔に
+                </label>
+                <label>
+                    <input type="radio" name="outputType" value="詳細に"> 詳細に
+                </label>
+                <label for="outputCount">出力件数：</label>
+                <select name="outputCount" id="outputCount">
+                </select>
+                <button id="closeModal">保存</button>
+            </div>
+        </div>
+    </div>
 
 
 
