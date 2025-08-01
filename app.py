@@ -102,30 +102,33 @@ def update_vocab(filename):
     if not os.path.exists(filepath):
         return jsonify({"error": "ファイルが存在しません"}), 404
 
+
+
     
     # ファイルを読み込んで更新
     with open(filepath, 'r+', encoding='utf-8') as f:
         words = json.load(f)
 
-    # 単語を探して更新
-    updated = False
-    for item in words:
-        if item.get('word') == word and item.get('meaning') == meaning:
-            item['rating'] = rating
-            updated = True
-            break
+        # 単語を探して更新
+        updated = False
+        for item in words:
+            if item.get('word') == word and item.get('meaning') == meaning:
+                item['rating'] = rating
+                updated = True
+                break
 
-    if not updated:
-        return jsonify({"error": "対象の単語が見つかりません"}), 404
+        if not updated:
+            return jsonify({"error": "対象の単語が見つかりません"}), 404
 
-    f.seek(0)
-    json.dump(words, f, ensure_ascii=False, indent=4)
-    f.truncate()
+        f.seek(0)
+        json.dump(words, f, ensure_ascii=False, indent=4)
+        f.truncate()
 
-    #なくてもいい
-    return jsonify({"message": "更新成功", "word": word, "rating": rating})
+        #なくてもいい
+        return jsonify({"message": "更新成功", "word": word, "rating": rating})
 
 
+# セル更新
 @app.route('/api/vocab/<filename>/<original_word>/<original_meaning>', methods=['PUT'])
 def update_word_meaning(filename, original_word, original_meaning):
     data = request.get_json()
@@ -164,6 +167,7 @@ def update_word_meaning(filename, original_word, original_meaning):
     return jsonify({"message": "単語と意味の更新成功", "original_word": original_word, "new_word": new_word, "new_meaning": new_meaning})
 
 
+# 行削除
 @app.route('/api/vocab/<filename>', methods=['DELETE'])
 def delete_vocab(filename):
 
@@ -197,6 +201,7 @@ def delete_vocab(filename):
         return jsonify({"message": f"'{word}' を削除しました"})
 
 
+# GPTAPI機能
 @app.route('/chat', methods=['POST'])
 def chat():
 

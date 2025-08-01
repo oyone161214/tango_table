@@ -1,12 +1,12 @@
 [
-  {
-    "word": "あ",
-    "meaning": "あ",
-    "rating": "green"
-  },
-  {
-    "word": "い",
-    "meaning": "い",
-    "rating": "yellow"
-  }
+    {
+        "word": "あ",
+        "meaning": "あいうえお",
+        "rating": "green"
+    },
+    {
+        "word": "い",
+        "meaning": "い",
+        "rating": "yellow"
+    }
 ]

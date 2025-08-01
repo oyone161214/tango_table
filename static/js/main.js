@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
             target.appendChild(input);
 
             input.focus();
-            input.select();
+            // input.select();
 
             // 編集終了処理
             const finishEditing = async () => {
@@ -388,11 +388,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
                     }
                     console.log('更新成功:', await response.json());
-                    fetchAndDisplayVocab();
+                    // fetchAndDisplayVocab();
                 } catch (error) {
                     console.error('更新に失敗:', error);
                     alert(`更新に失敗しました: ${error.message}`);
                     target.textContent = originalText; // エラー時は元のテキストに戻す
+
+                    if (target === wordCell) {
+                        wordCell.dataset.originalWord = originalText;
+                    } else if (target === meaningCell) {
+                        meaningCell.dataset.originalMeaning = originalText;
+                    }
                 }
             };
 
@@ -403,9 +409,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            const canselEditing = () => {
+                target.textContent = originalText;
+                target.classList.remove('editing');
+            }
+
             // フォーカスが外れたら終了
             input.addEventListener('blur', () => {
-                finishEditing();
+                canselEditing();
+                // finishEditing();
             });
         }
     });
