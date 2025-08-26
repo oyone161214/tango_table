@@ -102,8 +102,6 @@ def update_vocab(filename):
     if not os.path.exists(filepath):
         return jsonify({"error": "ファイルが存在しません"}), 404
 
-
-
     
     # ファイルを読み込んで更新
     with open(filepath, 'r+', encoding='utf-8') as f:
@@ -131,6 +129,8 @@ def update_vocab(filename):
 # セル更新
 @app.route('/api/vocab/<filename>/<original_word>/<original_meaning>', methods=['PUT'])
 def update_word_meaning(filename, original_word, original_meaning):
+    
+    # { word: newValue } // { meaning: newValue } 
     data = request.get_json()
     new_word = data.get('word')
     new_meaning = data.get('meaning')
@@ -189,6 +189,12 @@ def delete_vocab(filename):
         # データをひとつずつ取り出して、body:の削除する列と一致しないものだけを words に再代入する。
         words = [item for item in words if not (item.get('word') == word and item.get('meaning') == meaning)]
 
+        # afterWord = []
+        # for item in words:
+        #     if not (item.get('word') == word and item.get('meaning') == meaning):
+        #         afterWord.append(item)
+        #         continue
+
         # 削除前と後を比較
         if len(words) == original_len:
             return jsonify({"error": "単語が見つかりません"}), 404
@@ -209,7 +215,7 @@ def chat():
     data = request.get_json()
     message = data.get('message', '')
     decoded_message = urllib.parse.unquote(message) # デコードを試みる
-    print(f"Decoded message: {decoded_message}") # デコード後の状態
+    print(f"プロンプト: {decoded_message}") # デコード後の状態
 
     try:
         # OpenAI APIキーが設定されているか確認
