@@ -167,12 +167,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     deleteCell.appendChild(deleteButton);
 
-                    const retryCell = row.insertCell();
-                    const retryButton = document.createElement('button');
-                    retryButton.textContent = '再生成';
-                    retryCell.classList.add('buttonCell');
+                    // const retryCell = row.insertCell();
+                    // const retryButton = document.createElement('button');
+                    // retryButton.textContent = '再生成';
+                    // retryCell.classList.add('buttonCell');
 
-                    retryCell.appendChild(retryButton);
+                    // retryCell.appendChild(retryButton);
                 });
             }
         } catch (error) {
