@@ -6,12 +6,13 @@
 
 {% block body %}
 <div class="content">
-    <h1>単語帳を開く</h1>
+    <h1>単語でGO！</h1>
+    <h2>新しい単語帳を作る：</h2>
     <form action="/create" method="post">
         <input type="text" name="filename" placeholder="新しいファイル名">
         <button type="submit">作成して開く</button>
     </form>
-    <h2>既存のファイル：</h2>
+    <h2>作成した単語帳：</h2>
     <ul id="vocab-file-list">
         {% for file in files %}
         <li><a href = "{{ url_for('vocab_page', filename=file)}}">{{ file }}</a></li>

@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const retryCell = row.insertCell();
                     const retryButton = document.createElement('button');
-                    retryButton.textContent = 'リトライ';
+                    retryButton.textContent = '再生成';
                     retryCell.classList.add('buttonCell');
 
                     retryCell.appendChild(retryButton);
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const length = document.getElementById('outputLength').value || '設定なし';
         const count = document.getElementById('outputCount').value || '1件';
 
-        const promptMessage = `${filename}について${newWord}の意味。\n出力形式：テキストで意味の内容のみ。${newWord}を主語として含めない。\n出力件数: 意味${count}件\n文体: ${type}\n出力条件: ${style}、${length === '設定なし' ? '' : `1件あたりの目安文字数: ${length}字程度`}`;
+        const promptMessage = `${filename}について${newWord}の意味。\n出力形式：テキストで意味の内容のみ。ポイントを抑えて${style}。${newWord}を主語として含めない。\n出力件数: 意味${count}件\n文体: ${type}\n出力条件: ${style}、${length === '設定なし' ? '' : `1件あたりの目安文字数: ${length}字程度`}`;
         // 出力はJSON形式で、値はテキスト形式で条件の内容のみ。例：\n\n{\n  \"意味\": string,\n  \"実例\": string,\n }"},
         
         console.log(filename);
