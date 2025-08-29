@@ -1,10 +1,9 @@
-##　インストール
+## インストール
 VisualStudioCodeをインストール 
 Pythonをインストール
 
 ## プログラムのクローン
-https://github.com/oyone161214/tango_table
-URLからCodeをクローン
+このページからCodeをクローン
 
 ## ライブラリのインストール
 powershell を開く
